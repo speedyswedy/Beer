@@ -1,6 +1,13 @@
 // Generated on 2013-10-26 using generator-angular 0.5.1
 'use strict';
 
+var LIVERELOAD_PORT = 35729;
+var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
+var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+};
+
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -11,12 +18,14 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
-  grunt.initConfig({
-    yeoman: {
-      // configurable paths
+  // configurable paths
+  var yeomanConfig = {
       app: require('./bower.json').appPath || 'app',
       dist: 'dist'
-    },
+  };
+
+  grunt.initConfig({
+    yeoman: yeomanConfig,
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -60,13 +69,22 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      proxies: [
+                {
+                    context: '/v2',
+                    host: 'api.brewerydb.com',
+                    changeOrigin: true
+                }
+            ],
       livereload: {
         options: {
-          open: true,
-          base: [
-            '.tmp',
-            '<%= yeoman.app %>'
-          ]
+            middleware: function (connect) {
+                return [
+                   mountFolder(connect, '.tmp'),
+                   mountFolder(connect, yeomanConfig.app),
+                   proxySnippet
+                ];
+            }
         }
       },
       test: {
@@ -304,6 +322,7 @@ module.exports = function (grunt) {
       'clean:server',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies',
       'connect:livereload',
       'watch'
     ]);
@@ -337,4 +356,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-connect-proxy');
 };
