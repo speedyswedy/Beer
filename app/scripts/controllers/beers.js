@@ -1,14 +1,26 @@
 'use strict';
 
 angular.module('BeerApp')
-  .controller('BeersCtrl', function ($scope, Beers) {
+  .controller('BeersCtrl', function ($scope, $routeParams, Beers, $location) {
 
-  	$scope.id = 0;
+  	$scope.styleId = $routeParams.styleId;
+
+  	$scope.totalResults = 0;
+  	$scope.beers = []; 
 
   	$scope.getBeers = function() {
-  		Beers.get({name: 'Belgian Dubbel'}, function(beer) {
-			$scope.id = beer.data[0]['id'];
+  		Beers.get({styleId: $scope.styleId}, function(beers) {
+  			$scope.totalResults = beers.totalResults;
+			$scope.beers = beers.data;
 		});
   	};
+
+  	$scope.showBeer = function(beerId) {
+  		$location.path("beer/" + beerId);
+  	};
+
+  	$scope.predicate = '-name';
+
+  	$scope.getBeers();
 
   });

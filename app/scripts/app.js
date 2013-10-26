@@ -10,9 +10,13 @@ angular.module('BeerApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-       .when('/beers', {
+       .when('/beers/:styleId', {
         templateUrl: 'views/beers.html',
         controller: 'BeersCtrl'
+      })
+      .when('/beer/:beerId', {
+        templateUrl: 'views/beer.html',
+        controller: 'BeerCtrl'
       })
       .otherwise({
         redirectTo: '/'

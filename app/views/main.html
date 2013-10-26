@@ -1,9 +1,14 @@
-<div class="hero-unit">
-  <h1>'Allo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p>installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
-</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+           <th><a href="" ng-click="predicate = 'name'; reverse=!reverse">Beer style</a>
+          <th><a href="" ng-click="predicate = 'description'; reverse=!reverse">Description</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="style in styles | orderBy:predicate:!reverse" ng-click="showBeers(style.id)">
+            <td>{{ style.name }}</td>
+            <td>{{ style.description }}</td>
+        </tr>
+    </tbody>
+</table>
