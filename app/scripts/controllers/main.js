@@ -5,6 +5,6 @@ angular.module('BeerApp')
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
-      'Karma'
+      'Karma1'
     ];
   });
